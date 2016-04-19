@@ -4,14 +4,12 @@ var seq = 0;
 function changeBG() {
 
   var bgUrl = [
-    "url(https://images.unsplash.com/photo-1414016642750-7fdd78dc33d9?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)",
-    "url(https://images.unsplash.com/photo-1444012236767-1b471c68781c?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)",
-    "url(https://images.unsplash.com/photo-1444012104069-996724bf4a0a?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)",
-    "url(https://images.unsplash.com/photo-1445888761652-fc13cbb0d819?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)",
-    "url(https://images.unsplash.com/photo-1445888985293-8e1b904061c4?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)",
-    "url(https://images.unsplash.com/photo-1444228250525-3d441b642d12?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)",
-    "url(https://images.unsplash.com/photo-1444210971048-6130cf0c46cf?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)",
-    "url(https://images.unsplash.com/photo-1445308394109-4ec2920981b1?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450)"
+    "url(https://images.unsplash.com/photo-1433360405326-e50f909805b3?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=359e8e12304ffa04a38627a157fc3362)",
+    "url(https://images.unsplash.com/photo-1433190152045-5a94184895da?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=57115141c5d099ff83a0aa55c0b219a9)",
+    "url(https://images.unsplash.com/photo-1423768164017-3f27c066407f?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=712b919f3a2f6fc34f29040e8082b6d9)",
+    "url(https://images.unsplash.com/photo-1454817481404-7e84c1b73b4a?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=754ba511edc0c5a70d72bb11f399aec2)",
+    "url(https://images.unsplash.com/photo-1440557653082-e8e186733eeb?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=c3e33a77ab6df4ba68994c8d785cbb58)",
+
   ];
 
 

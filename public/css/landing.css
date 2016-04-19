@@ -29,12 +29,12 @@ body, html {
     border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
-h1 {
+.content h1 {
     font-weight: 700;
     font-size: 5em;
 }
 
-h1, h3 {
+.content h1, .content h3 {
     text-shadow: 0px 3px 5px rgba(0, 0, 0, 0.4);
     text-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
     text-shadow: 0px 18px 23px rgba(0, 0, 0, 0.2);
