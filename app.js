@@ -1,10 +1,13 @@
 var express         = require("express"),
-    app             = express(),
     flash           = require("connect-flash"),
     bodyParser      = require("body-parser"),
+    cookieParser    = require("cookie-parser"),
+    session         = require("express-session"),
     methodOverride  = require("method-override"),
     seedDB          = require("./seeds"),
-    mongoose        = require("mongoose");
+    mongoose        = require("mongoose"),
+    app             = express();
+
 
 var indexRoutes = require("./routes/index"),
     mainRoutes  = require("./routes/main");
@@ -14,11 +17,32 @@ mongoose.connect(url);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.use(flash());
-app.use(methodOverride("_method"));
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
+app.use(cookieParser("secret"));
+app.use(session({
+  secret: "secret",
+  cookie: { maxAge: 60000 },
+  resave: false,
+  saveUninitialized: false
+}));
 
-//seedDB();
+seedDB();
+
+// PASSPORT CONFIGURATION
+//app.use(require("express-session")({
+//  secret: "Once again Rusty wins cutest dog!",
+//  resave: false,
+//  saveUninitialized: false
+//}));
+
+app.use(flash());
+
+app.use(function(req, res, next){
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.use("/", indexRoutes);
 app.use("/main", mainRoutes);

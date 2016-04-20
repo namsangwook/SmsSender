@@ -7,24 +7,21 @@
     <header class="jumbotron">
         <div class="container">
             <div>
-                <h1><i class="fa fa-file-text-o" aria-hidden="true"></i> Welcome To Sms Sender</h1>
-                <p>send massive sms via android device</p>
-                <a class="btn btn-primary btn-lg" href="/main/new">Create New</a>
+                <h1><i class="fa fa-file-text-o" aria-hidden="true"></i> <%= job.name %></h1>
+                <p><%= job.created.toDateString() %></p>
             </div>
         </div>
     </header>
 
     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% jobs.forEach(function(job){ %>
+        <% job.smslist.forEach(function(sms){ %>
         <div class="col-md-3 col-sm-6">
             <div class="thumbnail">
                 <div class="caption">
-                    <h4><%= job.name %></h4>
-                    <h4><%= job.description %></h4>
+                    <h4>name : <%= sms.name %></h4>
+                    <h4>number : <%= sms.phonenumber %></h4>
+                    <h4>status : <%= sms.status %></h4>
                 </div>
-                <p>
-                    <a href="/main/<%= job._id %>" class="btn btn-primary">More Info</a>
-                </p>
             </div>
         </div>
         <% }); %>
