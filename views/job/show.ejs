@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 
-<link rel="stylesheet" type="text/css" href="../public/css/bootstrap.css">
+<!--<link rel="stylesheet" type="text/css" href="../public/css/bootstrap.css">-->
 
 
 <div class="container">
@@ -13,20 +13,24 @@
         </div>
     </header>
 
-    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% job.smslist.forEach(function(sms){ %>
-        <div class="col-md-3 col-sm-6">
-            <a href="/jobs/<%= job._id %>/smslist/<%= sms._id %>">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h4>name : <%= sms.name %></h4>
-                        <h4>number : <%= sms.phonenumber %></h4>
-                        <h4>status : <%= sms.status %></h4>
-                    </div>
-                </div>
-            </a>
+
+
+    <div class="container">
+        <div class="row">
+            <ul class="list-group col-md-11">
+                <% var index = 0; job.smslist.forEach(function(sms){ %>
+                <li class="list-group-item">
+                    <a href="/jobs/<%= job._id %>/smslist/<%= sms._id %>">
+                        <div>
+                            <%= index +1 %> )
+                            <%= sms.name%>
+                            <span class="badge" style="float: right"><%= sms.phonenumber %></span>
+                        </div>
+                    </a>
+                </li>
+                <% index++ }); %>
+            </ul>
         </div>
-        <% }); %>
     </div>
 
 </div>

@@ -31,7 +31,7 @@ app.use(session({
   saveUninitialized: false
 }));
 
-//seedDB();
+seedDB();
 
 // PASSPORT CONFIGURATION
 //app.use(require("express-session")({

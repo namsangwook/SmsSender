@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var Job = require("./models/job");
 var Sms   = require("./models/sms");
-
+//var Promise = require('bluebird');
 //var JobSchema = new mongoose.Schema({
 //  jobname: String,
 //  description: String,
@@ -25,11 +25,11 @@ var data = [
   {
     name: "alarm sms 1",
     description: "alarm sms for test 1"
-  },
-  {
-    name: "alarm sms 2",
-    description: "alarm sms for test 2"
   }
+  //{
+  //  name: "alarm sms 2",
+  //  description: "alarm sms for test 2"
+  //}
   //{
   //  jobname: "alarm sms 3",
   //  description: "alarm sms for test 3"
@@ -53,6 +53,47 @@ var data = [
 //  }
 //});
 
+var index = 0;
+function createSms(job) {
+  index++;
+  return new Promise(function(resolve, reject){
+    //var name =  "name for sms (" + index + ")";
+    //console.log(name);
+    Sms.create(
+      {
+        name: "name for sms (" + index + ")",
+        phonenumber: "01023456789"
+      }, function (err, sms) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          job.smslist.push(sms);
+          job.save(function (err, job, numAffected) {
+            if (err) {
+              reject(err);
+            }
+            else {
+              //console.log("Created new sms");
+              resolve(job);
+            }
+          })
+        }
+      });
+  });
+}
+
+function createSmsList(job, count) {
+  var sequence = Promise.resolve();
+  for(var i = 0; i < count; i++) {
+    sequence = sequence
+      .then(function() {
+        return createSms(job);
+      });
+  }
+  return sequence;
+}
+
 function seedDB(){
   //Remove all campgrounds
   Job.remove({}, function(err){
@@ -60,32 +101,38 @@ function seedDB(){
       console.log(err);
     }
     console.log("removed jobs!");
-    //add a few campgrounds
-    data.forEach(function(seed){
-      Job.create(seed, function (err, job) {
-        if (err) {
-          console.log(err)
-        } else {
-          console.log("added a job");
-          //create a sms
-          for(var i = 0; i < 100; i++) {
-            Sms.create(
-              {
-                name: "name for sms (" + i + ")",
-                phonenumber: "01023456789"
-              }, function (err, sms) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  job.smslist.push(sms);
-                  job.save();
-                  //console.log("Created new sms");
-                }
+    Sms.remove({}, function(err){
+      if (err) {
+        console.log(err);
+      }
+      console.log("removed sms!");
+
+      //add a few jobs
+      data.forEach(function(seed){
+        Job.create(seed, function (err, job) {
+          if (err) {
+            console.log(err)
+          } else {
+            console.log("added a job");
+            //create a sms
+            createSmsList(job, 100)
+              .then(function() {
+                console.log("create sms ended");
+                Sms.find({}, function(err, allSms) {
+                  if(err) {
+                    console.log(err);
+                  }
+                  else {
+                    console.log("sms count: " + allSms.length);
+                  }
+                });
               });
           }
-        }
+        });
       });
     });
+
+
   });
 }
 

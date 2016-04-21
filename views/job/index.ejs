@@ -1,7 +1,15 @@
 <% include ../partials/header %>
 
-<link rel="stylesheet" type="text/css" href="../public/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/bootstrap.css">
 
+<style>
+    /*div.row ul {*/
+        /*background: white;*/
+    /*}*/
+    div.row ul li:nth-child(2n) {
+        background: #dff0d8;
+    }
+</style>
 
 <div class="container">
     <header class="jumbotron">
@@ -14,20 +22,22 @@
         </div>
     </header>
 
-    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% jobs.forEach(function(job){ %>
-        <div class="col-md-3 col-sm-6">
-            <div class="thumbnail">
-                <div class="caption">
-                    <h4><%= job.name %></h4>
-                    <h4><%= job.description %></h4>
-                </div>
-                <p>
-                    <a href="/jobs/<%= job._id %>" class="btn btn-primary">More Info</a>
-                </p>
-            </div>
+    <div class="container">
+        <div class="row">
+            <ul class="list-group col-md-11">
+                <% var index = 0; jobs.forEach(function(job){ %>
+                <li class="list-group-item">
+                    <a href="/jobs/<%= job._id %>">
+                        <div>
+                            <%= index +1 %> )
+                            <%= job.name%>
+                            <span class="badge" style="float: right"><%= job.description %></span>
+                        </div>
+                    </a>
+                </li>
+                <% index++ }); %>
+            </ul>
         </div>
-        <% }); %>
     </div>
 
 </div>

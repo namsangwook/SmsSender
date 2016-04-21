@@ -29,7 +29,7 @@ router.get("/:id", middleware.isLoggedIn,  function(req, res){
       req.flash("error", err.message);
       console.log(err);
     } else {
-      console.log(foundJob)
+      //console.log(foundJob)
       //render show template with that campground
       res.render("job/show", {job: foundJob});
     }

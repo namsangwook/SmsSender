@@ -28,14 +28,15 @@ router.post("/register", function(req, res){
 });
 
 router.get("/login", function(req, res){
+  //console.log("get login");
   res.render("login");
 });
 
 router.post("/login", passport.authenticate("local",
   {
     successRedirect: "/jobs",
-    failRedirect: "/login"
-  }), function (req, res) {
+    failureRedirect: "/login"
+  }), function(req, res){
 });
 
 router.get("/logout", function(req, res){
