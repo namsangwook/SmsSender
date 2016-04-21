@@ -1,8 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var Job = require("../models/job");
+var middleware = require("../middleware");
 
-router.get("/", function (req, res) {
+router.get("/", middleware.isLoggedIn, function (req, res) {
   //req.flash("error", "test error");
   Job.find({}, function (err, allJobs) {
     if (err) {
@@ -15,13 +16,13 @@ router.get("/", function (req, res) {
   });
 });
 
-router.get("/new", function(req, res){
+router.get("/new", middleware.isLoggedIn,  function(req, res){
   //req.flash("error", "test error");
   //res.redirect("/");
   res.render("job/new")
 });
 
-router.get("/:id", function(req, res){
+router.get("/:id", middleware.isLoggedIn,  function(req, res){
   // find the job with provided id
   Job.findById(req.params.id).populate("smslist").exec(function(err, foundJob){
     if(err){
