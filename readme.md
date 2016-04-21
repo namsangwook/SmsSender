@@ -9,4 +9,13 @@
 * Make Model
 * Seed DB
 
+## Job Page
+* Show Job Detail Page
+
+## Sms Page
+* Show Sms Detail Page
+
+## Authentication
+* Add Authentication
+
 

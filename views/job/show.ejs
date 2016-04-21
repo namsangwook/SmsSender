@@ -16,13 +16,15 @@
     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% job.smslist.forEach(function(sms){ %>
         <div class="col-md-3 col-sm-6">
-            <div class="thumbnail">
-                <div class="caption">
-                    <h4>name : <%= sms.name %></h4>
-                    <h4>number : <%= sms.phonenumber %></h4>
-                    <h4>status : <%= sms.status %></h4>
+            <a href="/jobs/<%= job._id %>/smslist/<%= sms._id %>">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h4>name : <%= sms.name %></h4>
+                        <h4>number : <%= sms.phonenumber %></h4>
+                        <h4>status : <%= sms.status %></h4>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <% }); %>
     </div>

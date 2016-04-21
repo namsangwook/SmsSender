@@ -9,8 +9,9 @@ var express         = require("express"),
     app             = express();
 
 
-var indexRoutes = require("./routes/index"),
-    mainRoutes  = require("./routes/main");
+var indexRoutes   = require("./routes/index"),
+    jobRoutes     = require("./routes/job"),
+    smsRoutes = require("./routes/sms");
 
 var url = process.env.DATABASEURL || "mongodb://localhost/sms_sender";
 mongoose.connect(url);
@@ -45,7 +46,8 @@ app.use(function(req, res, next){
 });
 
 app.use("/", indexRoutes);
-app.use("/main", mainRoutes);
+app.use("/jobs", jobRoutes);
+app.use("/jobs/:id/smslist", smsRoutes);
 
 var port = process.env.PORT || 3003;
 app.listen(port, process.env.IP, function(){

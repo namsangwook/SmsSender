@@ -1,0 +1,17 @@
+<% include ../partials/header %>
+
+<link rel="stylesheet" type="text/css" href="../public/css/bootstrap.css">
+
+<div class="container">
+    <header class="jumbotron">
+        <div class="container">
+            <div>
+                <h1><i class="fa fa-file-text-o" aria-hidden="true"></i> <%= sms.name %></h1>
+                <p><%= sms.phonenumber %></p>
+                <p><%= sms.status %></p>
+            </div>
+        </div>
+    </header>
+</div>
+
+<% include ../partials/footer %>

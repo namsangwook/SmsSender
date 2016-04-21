@@ -10,7 +10,7 @@ router.get("/", function (req, res) {
       req.flash("error", err.message);
       res.redirect("back");
     } else {
-      res.render("main/index", {jobs: allJobs});
+      res.render("job/index", {jobs: allJobs});
     }
   });
 });
@@ -18,7 +18,7 @@ router.get("/", function (req, res) {
 router.get("/new", function(req, res){
   //req.flash("error", "test error");
   //res.redirect("/");
-  res.render("main/new")
+  res.render("job/new")
 });
 
 router.get("/:id", function(req, res){
@@ -30,7 +30,7 @@ router.get("/:id", function(req, res){
     } else {
       console.log(foundJob)
       //render show template with that campground
-      res.render("main/show", {job: foundJob});
+      res.render("job/show", {job: foundJob});
     }
   });
 });
