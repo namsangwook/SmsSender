@@ -2,28 +2,33 @@
 
 <!--<link rel="stylesheet" type="text/css" href="../public/css/bootstrap.css">-->
 
-
 <div class="container">
     <header class="jumbotron">
         <div class="container">
             <div>
                 <h1><i class="fa fa-file-text-o" aria-hidden="true"></i> <%= job.name %></h1>
-                <p><%= job.created.toDateString() %></p>
+                <p>User : <%= job.author.username %>, Create Date : <%= job.created.toDateString() %></p>
             </div>
         </div>
     </header>
-
-
 
     <div class="container">
         <div class="row">
             <ul class="list-group col-md-11">
                 <% var index = 0; job.smslist.forEach(function(sms){ %>
-                <li class="list-group-item">
+                <li class="list-group-item
+                 <% if (sms.status == 0) { %>
+
+                 <% } else if (sms.status == 1) { %>
+                    list-group-item-info
+                 <% } else { %>
+                    list-group-item-danger
+                    <% } %>
+                ">
                     <a href="/jobs/<%= job._id %>/smslist/<%= sms._id %>">
                         <div>
-                            <%= index +1 %> )
-                            <%= sms.name%>
+                            <%= index + 1 %> )
+                            <%= sms.name %>
                             <span class="badge" style="float: right"><%= sms.phonenumber %></span>
                         </div>
                     </a>
@@ -32,8 +37,6 @@
             </ul>
         </div>
     </div>
-
 </div>
-
 
 <% include ../partials/footer %>

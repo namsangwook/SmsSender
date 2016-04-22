@@ -19,5 +19,18 @@
 * Add Authentication
 
 ## Job, Sms List UI
+* show job list with login user
+
+## Authorization
+* Job authorization
+* Sms authorization
+
+## Sms Detail
+* status update(put request)
+
+## Sms List
 * add paging
+
+
+
 

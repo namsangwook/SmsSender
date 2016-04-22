@@ -4,12 +4,12 @@ var SmsSchema = mongoose.Schema({
   name: String,
   phonenumber: String,
   status:  {type: Number, default: 0}, // 0: undefined, 1: success, -1:failed
-  job: {
+  author: {
     id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Job"
+      ref: "User"
     },
-    jobname: String
+    username: String
   }
 });
 

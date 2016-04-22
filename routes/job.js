@@ -1,11 +1,12 @@
 var express = require("express");
+var mongoose = require("mongoose");
 var router = express.Router();
 var Job = require("../models/job");
 var middleware = require("../middleware");
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
   //req.flash("error", "test error");
-  Job.find({}, function (err, allJobs) {
+  Job.find({'author.id': mongoose.Types.ObjectId(req.user._id)}, function (err, allJobs) {
     if (err) {
       console.log(err);
       req.flash("error", err.message);
@@ -22,7 +23,7 @@ router.get("/new", middleware.isLoggedIn,  function(req, res){
   res.render("job/new")
 });
 
-router.get("/:id", middleware.isLoggedIn,  function(req, res){
+router.get("/:id", middleware.checkUserJob, function(req, res){
   // find the job with provided id
   Job.findById(req.params.id).populate("smslist").exec(function(err, foundJob){
     if(err){
