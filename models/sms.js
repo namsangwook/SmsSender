@@ -10,6 +10,12 @@ var SmsSchema = mongoose.Schema({
       ref: "User"
     },
     username: String
+  },
+  job: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Job"
+    }
   }
 });
 

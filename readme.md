@@ -28,8 +28,17 @@
 ## Sms Detail
 * status update(put request)
 
+## Job List
+* delete job (and sms)
+
 ## Sms List
 * add paging
+
+## Job List
+* add paging
+
+## Job List
+* add job (post request)
 
 
 

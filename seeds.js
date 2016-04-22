@@ -31,15 +31,47 @@ var data = [
   {
     name: "alarm sms 2",
     description: "alarm sms for test 2"
+  },
+  {
+    name: "alarm sms 3",
+    description: "alarm sms for test 3"
+  },
+  {
+    name: "alarm sms 4",
+    description: "alarm sms for test 4"
+  },
+  {
+    name: "alarm sms 5",
+    description: "alarm sms for test 5"
+  },
+  {
+    name: "alarm sms 6",
+    description: "alarm sms for test 6"
+  },
+  {
+    name: "alarm sms 7",
+    description: "alarm sms for test 7"
+  },
+  {
+    name: "alarm sms 8",
+    description: "alarm sms for test 8"
+  },
+  {
+    name: "alarm sms 9",
+    description: "alarm sms for test 9"
+  },
+  {
+    name: "alarm sms 10",
+    description: "alarm sms for test 10"
+  },
+  {
+    name: "alarm sms 11",
+    description: "alarm sms for test 11"
+  },
+  {
+    name: "alarm sms 12",
+    description: "alarm sms for test 4"
   }
-  //{
-  //  jobname: "alarm sms 3",
-  //  description: "alarm sms for test 3"
-  //},
-  //{
-  //  jobname: "alarm sms 4",
-  //  description: "alarm sms for test 4"
-  //}
 ];
 
 //var SmsSchema = mongoose.Schema({
@@ -65,7 +97,8 @@ function createSms(job, user) {
       {
         name: "name for sms (" + index + ")",
         phonenumber: "01023456789",
-        author: {id: user._id, username: user.username}
+        author: {id: user._id, username: user.username},
+        job: {id: job._id}
       }, function (err, sms) {
         if (err) {
           console.log(err);
@@ -190,8 +223,8 @@ function createJobs() {
       .then(function (job) {
         return getUser(userSeq)
           .then(function(user) {
-            userSeq++;
-            return createSmsList(job, user, 100);
+            //userSeq++;
+            return createSmsList(job, user, 101);
           });
       })
       .then(function () {
