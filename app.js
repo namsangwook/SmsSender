@@ -60,7 +60,7 @@ app.use("/", indexRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/jobs/:id/smslist", smsRoutes);
 
-var port = process.env.PORT || 3003;
+var port = process.env.PORT || 3000;
 app.listen(port, process.env.IP, function(){
   console.log("server started at http://localhost:" + port);
 });
