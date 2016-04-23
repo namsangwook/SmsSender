@@ -35,43 +35,43 @@ var data = [
   {
     name: "alarm sms 3",
     description: "alarm sms for test 3"
-  },
-  {
-    name: "alarm sms 4",
-    description: "alarm sms for test 4"
-  },
-  {
-    name: "alarm sms 5",
-    description: "alarm sms for test 5"
-  },
-  {
-    name: "alarm sms 6",
-    description: "alarm sms for test 6"
-  },
-  {
-    name: "alarm sms 7",
-    description: "alarm sms for test 7"
-  },
-  {
-    name: "alarm sms 8",
-    description: "alarm sms for test 8"
-  },
-  {
-    name: "alarm sms 9",
-    description: "alarm sms for test 9"
-  },
-  {
-    name: "alarm sms 10",
-    description: "alarm sms for test 10"
-  },
-  {
-    name: "alarm sms 11",
-    description: "alarm sms for test 11"
-  },
-  {
-    name: "alarm sms 12",
-    description: "alarm sms for test 4"
   }
+  //{
+  //  name: "alarm sms 4",
+  //  description: "alarm sms for test 4"
+  //},
+  //{
+  //  name: "alarm sms 5",
+  //  description: "alarm sms for test 5"
+  //},
+  //{
+  //  name: "alarm sms 6",
+  //  description: "alarm sms for test 6"
+  //},
+  //{
+  //  name: "alarm sms 7",
+  //  description: "alarm sms for test 7"
+  //},
+  //{
+  //  name: "alarm sms 8",
+  //  description: "alarm sms for test 8"
+  //},
+  //{
+  //  name: "alarm sms 9",
+  //  description: "alarm sms for test 9"
+  //},
+  //{
+  //  name: "alarm sms 10",
+  //  description: "alarm sms for test 10"
+  //},
+  //{
+  //  name: "alarm sms 11",
+  //  description: "alarm sms for test 11"
+  //},
+  //{
+  //  name: "alarm sms 12",
+  //  description: "alarm sms for test 4"
+  //}
 ];
 
 //var SmsSchema = mongoose.Schema({
@@ -223,7 +223,7 @@ function createJobs() {
       .then(function (job) {
         return getUser(userSeq)
           .then(function(user) {
-            //userSeq++;
+            userSeq++;
             return createSmsList(job, user, 101);
           });
       })
@@ -251,7 +251,10 @@ function createJobs() {
 function seedDB() {
   removeAllJob()
     .then(removeAllSms)
-    .then(createJobs)
+    .then(function() {
+
+    })
+    //.then(createJobs)
     .catch(function (err) {
       console.log(err);
     });

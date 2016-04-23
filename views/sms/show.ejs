@@ -25,15 +25,15 @@
                     <%= sms.phonenumber %>
                 </p>
                 <p>
-                    <a class="pull-right" href="/jobs/<%= job_id %>">Go Back</a>
-                    <form style="display: inline" action="/jobs/<%= job_id %>/smslist/<%= sms._id %>?_method=PUT" method="POST">
+                    <a class="pull-left" href="/jobs/<%= job_id %>">Go Back</a>
+                    <form  class="pull-right" style="display: inline-block" action="/jobs/<%= job_id %>/smslist/<%= sms._id %>?_method=PUT" method="POST">
+                        <input type="text" name="status" value="fail" style="display: none;">
+                        <button class="btn btn-xs btn-danger">fail</button>
+                    </form>
+                    <form class="pull-right" style="display: inline-block; margin-right: 10px" action="/jobs/<%= job_id %>/smslist/<%= sms._id %>?_method=PUT" method="POST">
                         <input type="text" name="status" value="success" style="display: none;">
                         <button class="btn btn-xs btn-primary">success</button>
                     </form>
-                     <form style="display: inline" action="/jobs/<%= job_id %>/smslist/<%= sms._id %>?_method=PUT" method="POST">
-                         <input type="text" name="status" value="fail" style="display: none;">
-                        <button class="btn btn-xs btn-danger">fail</button>
-                     </form>
                 </p>
             </div>
         </div>

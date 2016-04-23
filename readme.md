@@ -39,6 +39,8 @@
 
 ## Job List
 * add job (post request)
+* update job
+* file upload
 
 
 

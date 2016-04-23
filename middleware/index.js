@@ -1,5 +1,7 @@
 var Sms = require("../models/sms");
 var Job = require("../models/job");
+var path = require("path");
+var fs = require("fs");
 
 module.exports = {
   isLoggedIn: function (req, res, next) {
@@ -40,5 +42,36 @@ module.exports = {
       req.flash("error", "You need to be signed in to do that!");
       res.redirect("/login");
     }
+  },
+  fileUpload: function (req, res, next) {
+    var fstream;
+    req.pipe(req.busboy);
+    req.busboy.on('file', function (fieldname, file, filename) {
+      if (filename.length < 1) {
+        req.flash("error", "file is not selected");
+        res.redirect("/jobs/new");
+        return;
+      }
+      filename = Date.now() + "-" + filename;
+      console.log("Uploading: " + filename);
+
+      //Path where image will be uploaded
+      var filepath = path.join(__dirname, '../public/upload/' + filename);
+      fstream = fs.createWriteStream(filepath);
+      file.pipe(fstream);
+      fstream.on('close', function () {
+        console.log("******** Upload Finished of " + filename);
+        req.body.uploadFilePath = filepath;
+        next();
+      });
+    });
+    req.busboy.on('field', function (key, value, keyTruncated, valueTruncated) {
+      //console.log(key + " : " + value);
+      req.body[key] = value;
+    });
+    req.busboy.on('error', function () {
+      req.flash("error", "file upload failed");
+      res.redirect("/jobs");
+    });
   }
 };

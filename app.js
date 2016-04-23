@@ -6,9 +6,10 @@ var express         = require("express"),
     methodOverride  = require("method-override"),
     seedDB          = require("./seeds"),
     mongoose        = require("mongoose"),
-    passport       = require("passport"),
+    passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
     User            = require("./models/user"),
+    busboy          = require("connect-busboy"),
     app             = express();
 
 
@@ -23,6 +24,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(busboy());
+//app.use(busboy({
+//  highWaterMark: 2 * 1024 * 1024,
+//  limits: {
+//    fileSize: 10 * 1024 * 1024
+//  }
+//}));
+
 app.use(cookieParser("secret"));
 app.use(session({
   secret: "session secret",
@@ -32,13 +41,6 @@ app.use(session({
 }));
 
 //seedDB();
-
-// PASSPORT CONFIGURATION
-//app.use(require("express-session")({
-//  secret: "Once again Rusty wins cutest dog!",
-//  resave: false,
-//  saveUninitialized: false
-//}));
 
 app.use(flash());
 app.use(passport.initialize());
