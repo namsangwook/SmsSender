@@ -3,6 +3,11 @@ var express   = require("express"),
     User      = require("../models/user"),
     router    = express.Router();
 
+var bkfd2Password = require("pbkdf2-password");
+var hasher = bkfd2Password();
+
+var middleware = require("../middleware");
+
 router.get("/", function(req, res){
   res.render("landing");
 });
@@ -12,19 +17,39 @@ router.get("/register", function(req, res){
 });
 
 router.post("/register", function(req, res){
-  var newUser = new User({username: req.body.username});
-  User.register(newUser, req.body.password, function(err, user){
-    if (err) {
-      console.log(err);
-      req.flash("error", err.message);
-      return res.redirect("/register");
-    }
-    passport.authenticate("local")(req, res, function() {
-      req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username);
-      res.redirect("/jobs");
+  var username = req.body.username;
+  var password = req.body.password;
+
+  hasher({password: password}, function(err, pass, salt, hash){
+    var newUser = new User({
+      username: username,
+      hash: hash,
+      salt: salt
+    });
+
+    User.findOne({ username: username }, function (err, user) {
+      if (err) {
+        req.flash("error", err.message);
+        return res.redirect("/register");
+      }
+      if (user) {
+        req.flash("error", 'user already exists');
+        return res.redirect("/register");
+      }
+      User.create(newUser, function(err, newlyCreated) {
+        if (err) {
+          console.log(err);
+          req.flash("error", err.message);
+          return res.redirect("/register");
+        } else {
+          req.flash("success", "Successfully Signed Up! Nice to meet you " + username);
+          passport.authenticate('local')(req, res, function () {
+            res.redirect("/jobs");
+          })
+        }
+      });
     });
   });
-
 });
 
 router.get("/login", function(req, res){
@@ -32,17 +57,41 @@ router.get("/login", function(req, res){
   res.render("login");
 });
 
-router.post("/login", passport.authenticate("local",
-  {
-    successRedirect: "/jobs",
-    failureRedirect: "/login"
-  }), function(req, res){
+router.post("/login", function(req, res, next){
+  //console.log('login');
+  if (middleware.acceptJson(req)) {
+    return middleware.authenticate(req, res, function() {
+      var username = req.body.username;
+      var password = req.body.password;
+      var sid = req.sessionID;
+      console.log("username : " + username + ", password : " + password);
+      res.send({
+        result: 'success'
+      });
+    });
+  } else {
+    return passport.authenticate("local",
+      {
+        successRedirect: "/jobs",
+        failureRedirect: "/login"
+      })(req, res, next);
+  }
 });
 
 router.get("/logout", function(req, res){
-  req.logout();
-  req.flash("Logged You Out!");
-  res.redirect("/");
+  if (middleware.acceptJson(req)) {
+    req['user'] = null;
+    if (req.session) {
+      delete req.session.user;
+    }
+    res.send({
+      result: 'success'
+    });
+  } else {
+    req.logout();
+    req.flash("Logged You Out!");
+    res.redirect("/");
+  }
 });
 
 module.exports = router;

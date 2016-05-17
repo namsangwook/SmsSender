@@ -22,7 +22,8 @@ var dbHandler = require("../dbhandler");
 //});
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
-  //req.flash("error", "test error");
+  //console.log(req.get('Accept'));
+
   var itemPerPage = 10;
   var currentPage = 1;
   Job.find({'author.id': mongoose.Types.ObjectId(req.user._id)})
@@ -31,14 +32,32 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
     .exec(function (err, allJobs) {
       if (err) {
         console.log(err);
-        req.flash("error", err.message);
-        res.redirect("back");
+        if (middleware.acceptJson(req)) {
+          res.send({
+            result: 'fail',
+            message: err.message
+          });
+        } else {
+          req.flash("error", err.message);
+          res.redirect("back");
+        }
       } else {
         var total = allJobs.length;
         var start = itemPerPage * (currentPage - 1);
         var end = start + itemPerPage;
         var subList = allJobs.slice(start, end);
-        res.render("job/index", {jobs: subList, totalJobCount:total, itemPerPage: itemPerPage, currentPage: currentPage});
+        var result = {
+          result: 'success',
+          jobs: subList,
+          totalJobCount:total,
+          itemPerPage: itemPerPage,
+          currentPage: currentPage
+        };
+        if (middleware.acceptJson(req)) {
+          res.send(result);
+        } else {
+          res.render("job/index", result);
+        }
       }
     });
 });
@@ -53,14 +72,32 @@ router.get("/page/:page", middleware.isLoggedIn, function (req, res) {
     .exec(function (err, allJobs) {
       if (err) {
         console.log(err);
-        req.flash("error", err.message);
-        res.redirect("back");
+        if (middleware.acceptJson(req)) {
+          res.send({
+            result: 'fail',
+            message: err.message
+          });
+        } else {
+          req.flash("error", err.message);
+          res.redirect("back");
+        }
       } else {
         var total = allJobs.length;
         var start = itemPerPage * (currentPage - 1);
         var end = start + itemPerPage;
         var subList = allJobs.slice(start, end);
-        res.render("job/index", {jobs: subList, totalJobCount:total, itemPerPage: itemPerPage, currentPage: currentPage});
+        var result = {
+          result: 'success',
+          jobs: subList,
+          totalJobCount:total,
+          itemPerPage: itemPerPage,
+          currentPage: currentPage
+        };
+        if (middleware.acceptJson(req)) {
+          res.send(result);
+        } else {
+          res.render("job/index", result);
+        }
       }
     });
 });
@@ -86,7 +123,6 @@ router.post("/", middleware.isLoggedIn, middleware.fileUpload, function(req, res
     if(err){
       console.log(err);
     } else {
-
       dbHandler.createSmsFromFile(newlyCreated, author, req.body.uploadFilePath)
         .then(function() {
           //console.log(newlyCreated);
@@ -143,13 +179,30 @@ router.get("/:id/page/:page", middleware.checkUserJob, function(req, res){
   // find the job with provided id
   Job.findById(req.params.id).populate("smslist").exec(function(err, foundJob){
     if(err){
-      req.flash("error", err.message);
       console.log(err);
-      res.redirect("/jobs");
+      if (middleware.acceptJson(req)) {
+        res.send({
+          result: 'fail',
+          message: err.message
+        });
+      } else {
+        req.flash("error", err.message);
+        res.redirect("/jobs");
+      }
     } else {
       //console.log(foundJob)
       //render show template with that campground
-      res.render("job/show", {job: foundJob, itemPerPage:10, currentPage: req.params.page});
+      var result = {
+        result: 'success',
+        job: foundJob,
+        itemPerPage:10,
+        currentPage: req.params.page
+      };
+      if (middleware.acceptJson(req)) {
+        res.send(result);
+      } else {
+        res.render("job/show", result);
+      }
     }
   });
 });

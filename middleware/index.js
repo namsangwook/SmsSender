@@ -2,15 +2,29 @@ var Sms = require("../models/sms");
 var Job = require("../models/job");
 var path = require("path");
 var fs = require("fs");
+var User = require("../models/user");
+var bkfd2Password = require("pbkdf2-password");
+var hasher = bkfd2Password();
 
 module.exports = {
+  acceptJson: function(req) {
+    return req.get('Accept') == "application/json";
+  },
   isLoggedIn: function (req, res, next) {
     if (req.isAuthenticated()) {
       next();
     }
     else {
-      req.flash("error", "You must be signed in to do that");
-      res.redirect("/login");
+      if (req.get('Accept') == "application/json") {
+        res.send({
+          result: 'fail',
+          message: 'You must be signed in to do that'
+        });
+      }
+      else {
+        req.flash("error", "You must be signed in to do that");
+        res.redirect("/login");
+      }
     }
   },
   checkUserJob: function (req, res, next) {
@@ -19,13 +33,27 @@ module.exports = {
         if (job.author.id.equals(req.user._id)) {
           next();
         } else {
-          req.flash("error", "You don't have permission to do that!");
-          res.redirect("/jobs/");
+          if (req.get('Accept') == "application/json") {
+            res.send({
+              result: 'fail',
+              message: "You don't have permission to do that!"
+            });
+          } else {
+            req.flash("error", "You don't have permission to do that!");
+            res.redirect("/jobs/");
+          }
         }
       });
     } else {
-      req.flash("error", "You need to be signed in to do that!");
-      res.redirect("/login");
+      if (req.get('Accept') == "application/json") {
+        res.send({
+          result: 'fail',
+          message: "You need to be signed in to do that!"
+        });
+      } else {
+        req.flash("error", "You need to be signed in to do that!");
+        res.redirect("/login");
+      }
     }
   },
   checkUserSms: function (req, res, next) {
@@ -72,6 +100,37 @@ module.exports = {
     req.busboy.on('error', function () {
       req.flash("error", "file upload failed");
       res.redirect("/jobs");
+    });
+  },
+  authenticate: function(req, res, next) {
+    //console.log('authenticate');
+    var username = req.body.username;
+    var password = req.body.password;
+
+    User.findOne({ username: username }, function (err, user) {
+      if (err) {
+        res.send({
+          result: 'fail',
+          message: err.message
+        });
+      }
+      if (!user) {
+        res.send({
+          result: 'fail',
+          message: 'user does not exist'
+        });
+      }
+      hasher({ password: password, salt: user.salt}, function(err, pass, salt, hash){
+        if (user.hash === hash) {
+          req.session.user = user._id;
+          next();
+        } else {
+          res.send({
+            result: 'fail',
+            message: 'password is wrong'
+          });
+        }
+      });
     });
   }
 };
