@@ -7,7 +7,7 @@ var bkfd2Password = require("pbkdf2-password");
 var hasher = bkfd2Password();
 
 module.exports = {
-  acceptJson: function(req) {
+  acceptJson: function (req) {
     return req.get('Accept') == "application/json";
   },
   isLoggedIn: function (req, res, next) {
@@ -59,16 +59,43 @@ module.exports = {
   checkUserSms: function (req, res, next) {
     if (req.isAuthenticated()) {
       Sms.findById(req.params.smsId, function (err, sms) {
+        if (err) {
+          if (req.get('Accept') == "application/json") {
+            res.send({
+              result: 'fail',
+              message: err.message
+            });
+          } else {
+            req.flash("error", err.message);
+            res.redirect("/jobs/" + req.params.id);
+          }
+          return;
+        }
         if (sms.author.id.equals(req.user._id)) {
           next();
         } else {
-          req.flash("error", "You don't have permission to do that!");
-          res.redirect("/jobs/" + req.params.id);
+          if (req.get('Accept') == "application/json") {
+            res.send({
+              result: 'fail',
+              message: "You don't have permission to do that!"
+            });
+          } else {
+            req.flash("error", "You don't have permission to do that!");
+            res.redirect("/jobs/" + req.params.id);
+          }
         }
+
       });
     } else {
-      req.flash("error", "You need to be signed in to do that!");
-      res.redirect("/login");
+      if (req.get('Accept') == "application/json") {
+        res.send({
+          result: 'fail',
+          message: "You need to be signed in to do that!"
+        });
+      } else {
+        req.flash("error", "You need to be signed in to do that!");
+        res.redirect("/login");
+      }
     }
   },
   fileUpload: function (req, res, next) {
@@ -102,12 +129,12 @@ module.exports = {
       res.redirect("/jobs");
     });
   },
-  authenticate: function(req, res, next) {
+  authenticate: function (req, res, next) {
     //console.log('authenticate');
     var username = req.body.username;
     var password = req.body.password;
 
-    User.findOne({ username: username }, function (err, user) {
+    User.findOne({username: username}, function (err, user) {
       if (err) {
         res.send({
           result: 'fail',
@@ -120,7 +147,7 @@ module.exports = {
           message: 'user does not exist'
         });
       }
-      hasher({ password: password, salt: user.salt}, function(err, pass, salt, hash){
+      hasher({password: password, salt: user.salt}, function (err, pass, salt, hash) {
         if (user.hash === hash) {
           req.session.user = user._id;
           next();
