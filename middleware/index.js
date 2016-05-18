@@ -6,7 +6,7 @@ var User = require("../models/user");
 var bkfd2Password = require("pbkdf2-password");
 var hasher = bkfd2Password();
 
-module.exports = {
+var contents = {
   acceptJson: function (req) {
     return req.get('Accept') == "application/json";
   },
@@ -15,7 +15,7 @@ module.exports = {
       next();
     }
     else {
-      if (req.get('Accept') == "application/json") {
+      if (contents.acceptJson(req)) {
         res.send({
           result: 'fail',
           message: 'You must be signed in to do that'
@@ -33,7 +33,7 @@ module.exports = {
         if (job.author.id.equals(req.user._id)) {
           next();
         } else {
-          if (req.get('Accept') == "application/json") {
+          if (contents.acceptJson(req)) {
             res.send({
               result: 'fail',
               message: "You don't have permission to do that!"
@@ -45,7 +45,7 @@ module.exports = {
         }
       });
     } else {
-      if (req.get('Accept') == "application/json") {
+      if (contents.acceptJson(req)) {
         res.send({
           result: 'fail',
           message: "You need to be signed in to do that!"
@@ -60,7 +60,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       Sms.findById(req.params.smsId, function (err, sms) {
         if (err) {
-          if (req.get('Accept') == "application/json") {
+          if (contents.acceptJson(req)) {
             res.send({
               result: 'fail',
               message: err.message
@@ -74,7 +74,7 @@ module.exports = {
         if (sms.author.id.equals(req.user._id)) {
           next();
         } else {
-          if (req.get('Accept') == "application/json") {
+          if (contents.acceptJson(req)) {
             res.send({
               result: 'fail',
               message: "You don't have permission to do that!"
@@ -87,7 +87,7 @@ module.exports = {
 
       });
     } else {
-      if (req.get('Accept') == "application/json") {
+      if (contents.acceptJson(req)) {
         res.send({
           result: 'fail',
           message: "You need to be signed in to do that!"
@@ -161,3 +161,5 @@ module.exports = {
     });
   }
 };
+
+var exports = module.exports = contents;
