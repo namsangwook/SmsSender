@@ -55,13 +55,40 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    console.log('local stratage', username, password);
+//passport.use(new LocalStrategy(
+//  function(username, password, done) {
+//    console.log('local stratage', username, password);
+//    User.findOne({ username: username }, function (err, user) {
+//      if (err) { return done(err); }
+//      if (!user) {
+//        return done(null, false);
+//      }
+//      hasher({ password: password, salt: user.salt}, function(err, pass, salt, hash){
+//        if (user.hash === hash) {
+//          //MongoStore.destroy(user.session, function(){
+//          //  User.update({_id: result._id}, {$set:{"session" : sid}});
+//          //});
+//          done(null, user);
+//        } else {
+//          done(null, false);
+//        }
+//      });
+//    });
+//  }
+//));
+
+passport.use(new LocalStrategy({
+  // by default, local strategy uses username and password, we will override with email
+  usernameField : 'username',
+  passwordField : 'password',
+  passReqToCallback : true // allows us to pass back the entire request to the callback
+},
+function(req, username, password, done) {
+    //console.log('local stratage', username, password);
     User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
-        return done(null, false);
+        return done(null, false, req.flash('error', 'user not found'));
       }
       hasher({ password: password, salt: user.salt}, function(err, pass, salt, hash){
         if (user.hash === hash) {
@@ -70,7 +97,7 @@ passport.use(new LocalStrategy(
           //});
           done(null, user);
         } else {
-          done(null, false);
+          done(null, false, req.flash('error', 'password is wrong'));
         }
       });
     });

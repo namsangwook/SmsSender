@@ -73,8 +73,9 @@ router.post("/login", function(req, res, next){
     return passport.authenticate("local",
       {
         successRedirect: "/jobs",
-        failureRedirect: "/login"
-      })(req, res, next);
+        failureRedirect: "/login",
+        failureFlash : true // allow flash messages
+      })(req, res);
   }
 });
 
