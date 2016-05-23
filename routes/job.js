@@ -29,6 +29,7 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
   Job.find({'author.id': mongoose.Types.ObjectId(req.user._id)})
     //.skip(itemPerPage * (currentPage - 1))
     //.limit(itemPerPage)
+    .sort({created: 'desc'})
     .exec(function (err, allJobs) {
       if (err) {
         console.log(err);
@@ -69,6 +70,7 @@ router.get("/page/:page", middleware.isLoggedIn, function (req, res) {
   Job.find({'author.id': mongoose.Types.ObjectId(req.user._id)})
     //.skip(itemPerPage * (currentPage - 1))
     //.limit(itemPerPage)
+    .sort({created: 'desc'})
     .exec(function (err, allJobs) {
       if (err) {
         console.log(err);
