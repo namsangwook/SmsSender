@@ -37,7 +37,8 @@ module.exports = {
     //console.log('filepath : ' + filepath);
     var workbook = XLSX.readFile(filepath);
     //console.log('workbook : ' + workbook.SheetNames);
-    var translate_data = to_json(workbook)['Sheet1'];
+    var first_sheet_name = workbook.SheetNames[0];
+    var translate_data = to_json(workbook)[first_sheet_name];
     //console.log(translate_data);
     var sequence = Promise.resolve();
     translate_data.forEach(function (translate) {
