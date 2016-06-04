@@ -22,8 +22,8 @@ router.get("/:smsId", middleware.checkUserSms, function(req, res){
 router.put("/:smsId", middleware.checkUserSms, function(req, res){
   //res.send(req.body.status);
   // find sms with provided id
-  console.log("id : " + req.params.id);
-  console.log("sms id : " + req.params.smsId);
+  //console.log("id : " + req.params.id);
+  //console.log("sms id : " + req.params.smsId);
   if(req.body.status == "success") {
     var status = 1;
   }

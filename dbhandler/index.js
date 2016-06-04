@@ -1,12 +1,28 @@
 var XLSX = require('xlsx');
 var Sms = require("../models/sms");
+var fs = require('fs');
+
+function validPhonenumber(phonenumber) {
+  phonenumber = phonenumber.split('-').join('');
+  //console.log(phonenumber);
+  var regExp = /^0\d{2,3}\d{7,}/g;
+  var isPhonenumber = regExp.test(phonenumber);
+  //console.log(isPhonenumber);
+  return isPhonenumber;
+}
 
 function createSms(job, user, name, phonenumber) {
   return new Promise(function (resolve, reject) {
+    if (validPhonenumber(phonenumber)) {
+      var status = 0;
+    } else {
+      var status = -2;
+    }
     Sms.create(
       {
         name: name,
         phonenumber: phonenumber,
+        status: status,
         author: {id: user.id, username: user.username},
         job: {id: job._id}
       }, function (err, sms) {
@@ -58,6 +74,8 @@ module.exports = {
               reject(err);
             }
             else {
+              fs.unlinkSync(filepath);
+              //console.log('delete file : ' + filepath);
               resolve(job);
             }
           });
